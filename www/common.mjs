@@ -5,7 +5,7 @@
 /* global BMapGL */
 /* global darkStyle */
 
-function initMap(options) {
+export function initMap(options) {
   options = Object.assign({
       tilt: 0,
       heading: 0

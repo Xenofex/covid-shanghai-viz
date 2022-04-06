@@ -1,10 +1,59 @@
 body {
   margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: auto 300px;
+#sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background: white;
+  z-index: 100;
+  box-shadow: 0 0 50px gray;
+  transition: transform .25s ease;
+}
+
+#sidebar.collapsed {
+  transform: translateX(calc(100% + 50px));
+}
+
+#menu-control {
+  width: 39px;
+  height: 39px;
+  box-shadow: rgb(107 120 137 / 20%) 0px 2px 6px 0px, rgb(91 98 107 / 8%) 0px 4px 10px 0px;
+  background: rgb(255, 255, 255);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  border-radius: 4px;
+  display: flex;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (min-width: 600px) {
+  .container {
+    display: grid;
+    grid-template-columns: auto 300px;
+  }
+
+  #sidebar {
+    position: initial;
+    box-shadow: none;
+    transition: none;
+  }
+
+  #sidebar.collapsed {
+    transform: none;
+  }
+
+  #menu-control {
+    display: none;
+  }
 }
 
 #map_container {
@@ -20,4 +69,9 @@ body {
   display: block;
   width: calc(100% - 2em);
   margin: 1em;
+}
+
+.container {
+  height: 100vh; /* This is for browsers that don't support custom properties */
+  height: calc(var(--vh, 1vh) * 100);
 }
