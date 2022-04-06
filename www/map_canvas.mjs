@@ -1,10 +1,10 @@
-import { initMap } from './common.mjs' 
-import { MenuControl } from './menu_control.mjs';
+import { MenuControl } from './menu_control.mjs'
+import { initMap } from "./common.mjs"
 
-const map = initMap({
+export const map = initMap({
   heading: 0,
   zoom: 11,
-  center: [121.487899486, 31.24916171],
+  center: [121.487899486, 31.24916171], //上海市中心
   // style: whiteStyle,
   skyColors: [
       // 地面颜色
@@ -36,9 +36,7 @@ export const pointLayer = new mapvgl.PointLayer({
   selectedColor: '#ff0000', // 选中项颜色
   // autoSelect: true, // 根据鼠标位置来自动设置选中项
   onClick(e) { // 点击事件
-    const sidebar = document.getElementById('sidebar')
-    sidebar.classList.add('collapsed')
-    sidebar.querySelector('input').blur()
+    document.getElementById('sidebar').classList.add('collapsed')
     this.onMousemove(e)
   },
   onMousemove(e) {
@@ -55,40 +53,19 @@ export const pointLayer = new mapvgl.PointLayer({
 });
 view.addLayer(pointLayer);
 
-map.setDefaultCursor('default');
-
-const geocoder = new BMapGL.Geocoder()
-
-const autocomplete = new BMapGL.Autocomplete({
-  input: 'address-search'
-})
-
-autocomplete.addEventListener('onconfirm', (e) => {
-  console.log('on autocomplete confirm: ', e)
-  // const location = e.item.value
-  const address = document.getElementById('address-search').value
-  geocoder.getPoint(address, (point) => {
-    map.clearOverlays()
-    const marker = new BMapGL.Marker(point, {
-      icon: new BMapGL.Icon('marker.svg', new BMapGL.Size(20, 28.4))
-    })
-    map.addOverlay(marker)
-    map.centerAndZoom(point)
-  })
-
-  // map.centerAndZoom(document.getElementById('address-search').value)
-})
-
-map.addControl(new BMapGL.LocationControl({
-  // 控件的停靠位置（可选，默认左上角）
+var locationControl = new BMapGL.LocationControl({
+  // // 控件的停靠位置（可选，默认左上角）
   anchor: BMAP_ANCHOR_TOP_LEFT,
-  // 控件基于停靠位置的偏移量（可选）
+  // // 控件基于停靠位置的偏移量（可选）
   offset: new BMapGL.Size(10, 10)
-}));
+});
+// 将控件添加到地图上
+map.addControl(locationControl);
 
 map.addControl(new MenuControl({
   onClick(e) {
-    console.log('menu clicked')
     document.getElementById('sidebar').classList.toggle('collapsed')
   }
 }))
+
+map.setDefaultCursor('default');

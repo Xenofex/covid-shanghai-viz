@@ -1,11 +1,34 @@
+import {pointLayer, map} from "./map_canvas.mjs"
+
 let vueUrl = 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 if (location.href.match(/.*\.com/)) {
   vueUrl = 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js';
 }
 
 const Vue = await import(vueUrl)
-import { pointLayer } from "./map_canvas.mjs"
-import "./dynamic_vh.mjs"
+
+const geocoder = new BMapGL.Geocoder()
+
+// 不明原因，该组件如果移动到map_canvas.mjs，将会不起作用
+const autocomplete = new BMapGL.Autocomplete({
+  input: 'address-search'
+})
+
+autocomplete.addEventListener('onconfirm', (e) => {
+  console.log('on autocomplete confirm: ', e)
+  // const location = e.item.value
+  const address = document.getElementById('address-search').value
+  geocoder.getPoint(address, (point) => {
+    map.clearOverlays()
+    const marker = new BMapGL.Marker(point, {
+      icon: new BMapGL.Icon('marker.svg', new BMapGL.Size(20, 28.4))
+    })
+    map.addOverlay(marker)
+    map.centerAndZoom(point)
+  })
+
+  // map.centerAndZoom(document.getElementById('address-search').value)
+})
 
 Vue.createApp({
   data() {

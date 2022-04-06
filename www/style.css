@@ -75,3 +75,8 @@ body {
   height: 100vh; /* This is for browsers that don't support custom properties */
   height: calc(var(--vh, 1vh) * 100);
 }
+
+/* 百度地图自动补全元素 */
+.tangram-suggestion-main {
+  z-index: 150;
+}
