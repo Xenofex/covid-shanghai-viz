@@ -22,11 +22,7 @@ const view = new mapvgl.View({
   map: map
 });
 
-const textLayer = new mapvgl.TextLayer({
-  color: 'black',
-  offset: [0, -15]
-})
-view.addLayer(textLayer)
+
 
 export const pointLayer = new mapvgl.PointLayer({
   size: 5,
@@ -52,6 +48,12 @@ export const pointLayer = new mapvgl.PointLayer({
 }
 });
 view.addLayer(pointLayer);
+
+const textLayer = new mapvgl.TextLayer({
+  color: 'black',
+  offset: [0, -15]
+})
+view.addLayer(textLayer)
 
 var locationControl = new BMapGL.LocationControl({
   // // 控件的停靠位置（可选，默认左上角）
