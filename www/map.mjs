@@ -1,4 +1,4 @@
-import {pointLayer, map} from "./map_canvas.mjs"
+import {pointLayer, markerListLayer, map} from "./map_canvas.mjs"
 
 let vueUrl = 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 if (location.href.match(/.*\.com/)) {
@@ -30,36 +30,30 @@ autocomplete.addEventListener('onconfirm', (e) => {
   // map.centerAndZoom(document.getElementById('address-search').value)
 })
 
+const { ref, onMounted, watch, computed } = Vue
+
 Vue.createApp({
-  data() {
-    return {
-      currentDate: undefined,
-      dates: [],
-    }
-  },
+  setup() {
+    const currentDate = ref()
+    const dates = ref([])
+    const mapType = ref('case-location')
+    const rawData = ref()
 
-  async mounted() {
-    await Promise.all([this.loadAddressMap(), this.loadDataJson()])
+    let addressMap
 
-    this.dates = Object.keys(this.rawData)
-    this.setDate(this.dates[this.dates.length-1])
-  },
-
-  methods: {
-    async loadDataJson() {
+    async function loadDataJson() {
       const r1 = await fetch('data.json')
-      this.rawData = await r1.json()
-    },
+      rawData.value = await r1.json()
+    }
 
-    async loadAddressMap() {
+    async function loadAddressMap() {
       const r2 = await fetch('addressMap.json')
-      this.addressMap = await r2.json()  
-    },
+      addressMap = await r2.json()  
+    }
 
-    setDate(date) {
-      this.currentDate = date
 
-      const values = this.rawData[date]
+    function caseLocationData(date) {
+      const values = rawData.value[date]
       const data = []
   
       for (const districtName in values) {
@@ -68,7 +62,7 @@ Vue.createApp({
         
         for (const address of addresses) {
           const fullAddress = districtName + address
-          const location = this.addressMap[fullAddress]
+          const location = addressMap[fullAddress]
   
           if (location) {
             data.push({
@@ -83,9 +77,98 @@ Vue.createApp({
           }
         }
       }
-  
-      pointLayer.setData(data);
+
+      return data
     }
-  }
+
+    const districtCenterMap = {}
+    async function getDistrictCenter(name) {
+      if (!districtCenterMap[name]) {
+        districtCenterMap[name] = await new Promise(resolve => {
+          geocoder.getPoint('上海市' + name, function(point) {
+            resolve(point)
+          })
+        })
+        
+      }
+
+      return districtCenterMap[name]
+    }
+
+    async function districtData(date, extractor) {
+      const result = []
+      const dataOfDay = rawData.value[date]
+      for (const districtName in dataOfDay) {
+        const count = extractor(dataOfDay[districtName])
+        
+        const {lat,lng} = await getDistrictCenter(districtName)
+        result.push({
+          geometry: {
+              type: 'Point',
+              coordinates: [lng, lat]
+          },
+          properties: {
+              text: `${districtName}\n${count}`
+          }
+        })
+
+      }
+    
+      return result
+    }
+
+    onMounted(async () => {
+      await Promise.all([loadAddressMap(), loadDataJson()])
+
+      dates.value = Object.keys(rawData.value)
+      currentDate.value = dates.value[dates.value.length-1]
+    })
+
+    async function reloadData() {
+      const date = currentDate.value
+      switch(mapType.value) {
+        case 'case-location':
+          pointLayer.setData(caseLocationData(date))
+          markerListLayer.setData([])
+          break;
+        case 'district-statistics-symptomatic':
+          pointLayer.setData([])
+          markerListLayer.setData(await districtData(date, ({cases}) => cases))
+          break;
+        case 'district-statistics-asymptomatic':
+          markerListLayer.setData(await districtData(date, ({asymptomaticCases}) => asymptomaticCases))
+          pointLayer.setData([])
+          break;
+        case 'district-statistics-total':
+          markerListLayer.setData(await districtData(date, ({cases, asymptomaticCases}) => cases + asymptomaticCases))
+          pointLayer.setData([])
+          break;
+      }
+    }
+
+    watch(mapType, reloadData)
+    watch(currentDate, reloadData)
+
+    const dataOfCurrentDate = computed(() => rawData.value && rawData.value[currentDate?.value])
+    const totalOfCurrentDate = computed(() => {
+      let totalCases = 0, totalAsymptomaticCases = 0
+      for (const district in dataOfCurrentDate.value) {
+        const { cases, asymptomaticCases } = dataOfCurrentDate.value[district] || {}
+        totalCases += cases || 0
+        totalAsymptomaticCases += asymptomaticCases || 0
+      }
+
+      return { totalCases, totalAsymptomaticCases }
+    })
+
+    return {
+      currentDate,
+      dates,
+      mapType,
+      dataOfCurrentDate,
+      totalOfCurrentDate
+    }
+  },
+
 }).mount('#sidebar')
 

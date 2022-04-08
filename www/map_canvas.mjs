@@ -55,6 +55,15 @@ const textLayer = new mapvgl.TextLayer({
 })
 view.addLayer(textLayer)
 
+export const markerListLayer = new mapvgl.TextLayer({
+  // fillSize: 0,
+  // shadowSize: 45
+  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+  color: 'black'
+})
+view.addLayer(markerListLayer)
+
+
 var locationControl = new BMapGL.LocationControl({
   // // 控件的停靠位置（可选，默认左上角）
   anchor: BMAP_ANCHOR_TOP_LEFT,

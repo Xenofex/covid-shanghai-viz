@@ -26,12 +26,49 @@
     <div id="sidebar" class="collapsed" v-cloak>
       <input type="search" placeholder="输入地址搜索..." id="address-search">
 
-      <ul class="date-list">
-        <li v-for="date in dates">
-          <input type="radio" :name="'date'" :id="`radio-${date}`" :checked="date === currentDate" @click="setDate(date)"/>
-          <label :for="`radio-${date}`">{{date}}</label>
-        </li>
+      <!-- <ul class="maptype-radios">
+        <li><input type="radio" name="map" id="case-location" value="case-location" v-model="mapType" checked>
+          <label for="case-location">新增案例位置</label></li>
+        <li><input type="radio" name="map" id="district-statistics-symptomatic" value="district-statistics-symptomatic" v-model="mapType">
+          <label for="district-statistics-symptomatic">各区确诊</label></li>
+        <li><input type="radio" name="map" id="district-statistics-asymptomatic" value="district-statistics-asymptomatic" v-model="mapType">
+          <label for="district-statistics-asymptomatic">各区无症状</label></li>
+        <li><input type="radio" name="map" id="district-statistics-total" value="district-statistics-total" v-model="mapType">
+          <label for="district-statistics-total">各区总数</label></li>
       </ul>
+
+      <hr>
+ -->
+      <div class="date-list">
+        <ul>
+          <li v-for="date in dates.slice().reverse()" :key="date">
+            <input type="radio" :name="'date'" :id="`radio-${date}`" :value="date" v-model="currentDate"/>
+            <label :for="`radio-${date}`">{{date}}</label>
+          </li>
+        </ul>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <td>区</td>
+            <td>确诊</td>
+            <td>无症状</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(data, district) in dataOfCurrentDate" :key="district">
+            <td>{{district}}</td>
+            <td>{{data.cases}}</td>
+            <td>{{data.asymptomaticCases}}</td>
+          </tr>
+        </tbody>
+        <tr>
+          <td>总计</td>
+          <td>{{totalOfCurrentDate.totalCases}}</td>
+          <td>{{totalOfCurrentDate.totalAsymptomaticCases}}</td>
+        </tr>
+      </table>
     </div>
   </div>
   <script type="module" src="map.mjs"></script>
