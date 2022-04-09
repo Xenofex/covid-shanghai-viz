@@ -43,17 +43,19 @@ Vue.createApp({
 
     async function loadDataJson() {
       let dataUrl = 'data.json'
-      if (location.href.includes('github.io')) dataUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/data.json?raw=true"
+      if (location.href.includes('github.io')) 
+        dataUrl = "https://media.githubusercontent.com/media/Xenofex/covid-shanghai-viz/master/docs/data.json"
 
-      const r1 = await fetch(dataUrl)
+      const r1 = await fetch(dataUrl, { mode: 'no-cors' })
       rawData.value = await r1.json()
     }
 
     async function loadAddressMap() {
       let addressMapUrl = 'addressMap.json'
-      if (location.href.includes('github.io')) addressMapUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/addressMap.json?raw=true"
-      const r2 = await fetch(addressMapUrl)
-      addressMap = await r2.json()  
+      if (location.href.includes('github.io'))
+        addressMapUrl = "https://media.githubusercontent.com/media/Xenofex/covid-shanghai-viz/master/docs/addressMap.json"
+      const r2 = await fetch(addressMapUrl, { mode: 'no-cors' })
+      addressMap = await r2.json()
     }
 
 
