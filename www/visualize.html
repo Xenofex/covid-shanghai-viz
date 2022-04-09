@@ -28,7 +28,7 @@
 
       <!-- <ul class="maptype-radios">
         <li><input type="radio" name="map" id="case-location" value="case-location" v-model="mapType" checked>
-          <label for="case-location">新增案例位置</label></li>
+          <label for="case-location">新增案例位置</label></li>f
         <li><input type="radio" name="map" id="district-statistics-symptomatic" value="district-statistics-symptomatic" v-model="mapType">
           <label for="district-statistics-symptomatic">各区确诊</label></li>
         <li><input type="radio" name="map" id="district-statistics-asymptomatic" value="district-statistics-asymptomatic" v-model="mapType">
@@ -51,16 +51,16 @@
       <table>
         <thead>
           <tr>
-            <td>区</td>
+            <td></td>
             <td>确诊</td>
             <td>无症状</td>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(data, district) in dataOfCurrentDate" :key="district">
+          <tr v-for="district in allDistricts" :key="district">
             <td>{{district}}</td>
-            <td>{{data.cases}}</td>
-            <td>{{data.asymptomaticCases}}</td>
+            <td>{{dataOfCurrentDate && dataOfCurrentDate[district]?.cases}}</td>
+            <td>{{dataOfCurrentDate && dataOfCurrentDate[district]?.asymptomaticCases}}</td>
           </tr>
         </tbody>
         <tr>

@@ -166,7 +166,13 @@ Vue.createApp({
       dates,
       mapType,
       dataOfCurrentDate,
-      totalOfCurrentDate
+      totalOfCurrentDate,
+      allDistricts: [
+        '浦东新区', '黄浦区', '静安区', '徐汇区',
+        '长宁区', '普陀区', '虹口区', '杨浦区',
+        '宝山区', '闵行区', '嘉定区', '金山区',
+        '松江区', '青浦区', '奉贤区', '崇明区',
+      ]
     }
   },
 
