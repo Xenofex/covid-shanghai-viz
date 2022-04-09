@@ -43,7 +43,7 @@ Vue.createApp({
 
     async function loadDataJson() {
       let dataUrl = 'data.json'
-      if (localStorage.href.includes('github.io')) dataUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/data.json?raw=true"
+      if (location.href.includes('github.io')) dataUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/data.json?raw=true"
 
       const r1 = await fetch(dataUrl)
       rawData.value = await r1.json()
@@ -51,7 +51,7 @@ Vue.createApp({
 
     async function loadAddressMap() {
       let addressMapUrl = 'addressMap.json'
-      if (localStorage.href.includes('github.io')) addressMapUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/addressMap.json?raw=true"
+      if (location.href.includes('github.io')) addressMapUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/addressMap.json?raw=true"
       const r2 = await fetch(addressMapUrl)
       addressMap = await r2.json()  
     }
