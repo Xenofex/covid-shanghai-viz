@@ -11,7 +11,7 @@ async function parseFile(path) {
   const title = dom.window.document.querySelector('.Article-title, #activity-name').textContent
   const date = title.match(/\d+月\d+日/)[0]
 
-  // if (!date.match(/4月3日/) && data[date]) {
+  // if (!date.match(/4月4日/) && data[date]) {
   //   return
   // }
 
@@ -55,17 +55,22 @@ async function parseFile(path) {
         setDistrict(districtName)
       }
 
-      if (m = text.match(/无新增.*?确诊病例/)) {
-        district.cases = 0
-      } else if (m = text.match(/新增(\d+)例.*?确诊病例/)) {
-        district.cases = parseInt(m[1], 10)
+      if (m = text.match(/(?:(\d+例)|无新增).*?确诊病例.*?(?:(\d+例)|无新增).*?无症状感染者/)) {
+        district.cases = parseInt(m[1], 10) || 0
+        district.asymptomaticCases = parseInt(m[2], 10) || 0
       }
 
-      if (m = text.match(/(\d+)例[^，]*?无症状感染者/)) {
-        district.asymptomaticCases = parseInt(m[1], 10)
-      } else if (m = text.match(/无新增.*?无症状感染者/)) {
-        district.asymptomaticCases = 0
-      }
+      // if (m = text.match(/无新增.*?确诊病例/)) {
+      //   district.cases = 0
+      // } else if (m = text.match(/新增(\d+)例.*?确诊病例/)) {
+      //   district.cases = parseInt(m[1], 10)
+      // }
+
+      // if (m = text.match(/(\d+)例[^，、]*?无症状感染者/)) {
+      //   district.asymptomaticCases = parseInt(m[1], 10)
+      // } else if (m = text.match(/无新增.*?无症状感染者/)) {
+      //   district.asymptomaticCases = 0
+      // }
 
       continue
     }

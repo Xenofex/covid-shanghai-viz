@@ -10,7 +10,7 @@ async function geocode(address) {
 
 const data = JSON.parse(await readFile('docs/data.json'))
 
-const addressMapFile = 'dcos/addressMap.json'
+const addressMapFile = 'docs/addressMap.json'
 
 const addressMap = JSON.parse(await readFile(addressMapFile))
 
