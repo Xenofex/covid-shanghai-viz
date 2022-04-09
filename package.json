@@ -5,8 +5,8 @@
   "main": "index.mjs",
   "scripts": {
     "start": "node index.mjs && node geocode.mjs",
-    "server": "((sleep 0.5; open 'http://localhost:8000/visualize.html') &) && cd www/ && python3 -m http.server",
-    "deploy": "rsync -C -r www/ \"$COVID_SHANGHAI_DEPLOY_TO\"",
+    "server": "((sleep 0.5; open 'http://localhost:8000/') &) && cd docs/ && python3 -m http.server",
+    "deploy": "rsync -C -r docs/ \"$COVID_SHANGHAI_DEPLOY_TO\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

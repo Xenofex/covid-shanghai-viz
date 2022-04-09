@@ -1,7 +1,7 @@
 import { JSDOM } from 'jsdom'
 import { readdir, readFile, writeFile } from 'fs/promises'
 
-const dataFile = 'www/data.json'
+const dataFile = 'docs/data.json'
 
 const data = JSON.parse(await readFile(dataFile))
 

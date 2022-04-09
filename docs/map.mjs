@@ -1,7 +1,7 @@
 import {pointLayer, markerListLayer, map} from "./map_canvas.mjs"
 
 let vueUrl = 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-if (location.href.match(/.*\.com/)) {
+if (location.href.match(/.*\.com|github\.io/)) {
   vueUrl = 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js';
 }
 
@@ -42,12 +42,17 @@ Vue.createApp({
     let addressMap
 
     async function loadDataJson() {
-      const r1 = await fetch('data.json')
+      let dataUrl = 'data.json'
+      if (localStorage.href.includes('github.io')) dataUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/data.json?raw=true"
+
+      const r1 = await fetch(dataUrl)
       rawData.value = await r1.json()
     }
 
     async function loadAddressMap() {
-      const r2 = await fetch('addressMap.json')
+      let addressMapUrl = 'addressMap.json'
+      if (localStorage.href.includes('github.io')) addressMapUrl = "https://github.com/Xenofex/covid-shanghai-viz/blob/master/docs/addressMap.json?raw=true"
+      const r2 = await fetch(addressMapUrl)
       addressMap = await r2.json()  
     }
 
