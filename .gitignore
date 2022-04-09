@@ -1,3 +1,2 @@
 /node_modules
-/www/data.json
-/www/addressMap.json
+/.env

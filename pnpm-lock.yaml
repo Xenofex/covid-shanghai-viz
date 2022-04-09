@@ -1,11 +1,13 @@
 lockfileVersion: 5.3
 
 specifiers:
+  dotenv: ^16.0.0
   esbuild: ^0.14.29
   jsdom: ^19.0.0
   node-fetch: ^3.2.3
 
 dependencies:
+  dotenv: 16.0.0
   jsdom: 19.0.0
   node-fetch: 3.2.3
 
@@ -130,6 +132,11 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       webidl-conversions: 7.0.0
+    dev: false
+
+  /dotenv/16.0.0:
+    resolution: {integrity: sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==}
+    engines: {node: '>=12'}
     dev: false
 
   /esbuild-android-64/0.14.29:

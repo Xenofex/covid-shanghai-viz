@@ -1,9 +1,8 @@
-// https://api.map.baidu.com/geocoding/v3/?address=北京市海淀区上地十街10号&output=json&ak=您的ak
-
+import 'dotenv/config' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import fetch from 'node-fetch'
 import { readFile, writeFile } from 'fs/promises'
 
-const ak = 'xbFGU3Ikuc2Gmu4Od2cdriVZ6wKpTczl'
+const ak = process.env.BAIDU_MAP_API_KEY
 
 async function geocode(address) {
   return await fetch(`https://api.map.baidu.com/geocoding/v3/?address=${address}&output=json&ak=${ak}`)
