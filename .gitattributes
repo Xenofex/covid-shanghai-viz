@@ -1,2 +1,2 @@
-www/addressMap.json filter=lfs diff=lfs merge=lfs -text
-www/data.json filter=lfs diff=lfs merge=lfs -text
+docs/addressMap.json filter=lfs diff=lfs merge=lfs -text
+docs/data.json filter=lfs diff=lfs merge=lfs -text
