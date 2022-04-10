@@ -7,7 +7,7 @@
     "start": "node index.mjs && node geocode.mjs",
     "server": "((sleep 0.5; open 'http://localhost:8000/') &) && cd docs/ && python3 -m http.server",
     "deploy": "rsync -C -r docs/ \"$COVID_SHANGHAI_DEPLOY_TO\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "uvu test"
   },
   "author": "",
   "license": "MIT",
@@ -17,6 +17,7 @@
     "node-fetch": "^3.2.3"
   },
   "devDependencies": {
-    "esbuild": "^0.14.29"
+    "esbuild": "^0.14.29",
+    "uvu": "^0.5.3"
   }
 }

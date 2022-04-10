@@ -11,7 +11,7 @@ async function parseFile(path) {
   const title = dom.window.document.querySelector('.Article-title, #activity-name').textContent
   const date = title.match(/\d+月\d+日/)[0]
 
-  // if (!date.match(/4月4日/) && data[date]) {
+  // if (!date.match(/4月9日/) && data[date]) {
   //   return
   // }
 
@@ -76,11 +76,12 @@ async function parseFile(path) {
     }
 
     if (district && !text.match(/消毒|编辑/)) {
-      if (text.includes('、')) {
-        district.addresses.concat(text.split("、"))
-      } else {
-        district.addresses.push(text)
-      }
+      text.split(/、|，/).forEach((address) => {
+        address = address.trim()
+        if (address) {
+          district.addresses.push(address)
+        }
+      })
     }
   }
 }
