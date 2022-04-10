@@ -12,7 +12,7 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  height: 100vh;
+  height: calc(100vh - env(safe-area-inset-bottom));
   background: white;
   z-index: 100;
   box-shadow: 0 0 50px gray;
@@ -65,7 +65,7 @@ body {
 
 #map_container {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - env(safe-area-inset-bottom));
 }
 
 .date-list {
@@ -88,13 +88,6 @@ body {
   width: calc(100% - 2em);
   margin: 1em;
 }
-
-.container {
-  height: 100vh; /* This is for browsers that don't support custom properties */
-  height: calc(var(--vh, 1vh) * 100);
-}
-
-
 
 table {
   margin: 1em;
