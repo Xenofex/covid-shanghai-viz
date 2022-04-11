@@ -127,7 +127,7 @@ Vue.createApp({
     onMounted(async () => {
       await Promise.all([loadAddressMap(), loadDataJson()])
 
-      dates.value = Object.keys(rawData.value)
+      dates.value = Object.keys(rawData.value).sort()
       currentDate.value = dates.value[dates.value.length-1]
     })
 

@@ -15,12 +15,8 @@ const addressMapFile = 'docs/addressMap.json'
 
 const addressMap = JSON.parse(await readFile(addressMapFile))
 
-await WorkerPool.execute(10, async (workerPool) => {
+await WorkerPool.execute(5, async (workerPool) => {
   for (const date in data) {
-    // if (date !== '3月18日') {
-    //   continue
-    // }
-
     const dataOfDay = data[date]
     
     for (const districtName in dataOfDay) {
@@ -42,6 +38,7 @@ await WorkerPool.execute(10, async (workerPool) => {
       }
     }
   
-    await writeFile(addressMapFile, JSON.stringify(addressMap))
   }
 })
+
+await writeFile(addressMapFile, JSON.stringify(addressMap))

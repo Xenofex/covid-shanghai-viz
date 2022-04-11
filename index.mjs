@@ -1,9 +1,10 @@
 import { JSDOM } from 'jsdom'
 import { readdir, readFile, writeFile } from 'fs/promises'
+import { existsSync } from 'fs'
 
 const dataFile = 'docs/data.json'
 
-const data = JSON.parse(await readFile(dataFile))
+const data = existsSync(dataFile) ? JSON.parse(await readFile(dataFile)) : {}
 
 async function parseFile(path) {
   const content = await readFile(`html/${path}`)
@@ -11,7 +12,7 @@ async function parseFile(path) {
   const title = dom.window.document.querySelector('.Article-title, #activity-name').textContent
   const date = title.match(/\d+月\d+日/)[0]
 
-  // if (!date.match(/4月9日/) && data[date]) {
+  // if (data[date]) {
   //   return
   // }
 
@@ -41,7 +42,7 @@ async function parseFile(path) {
 
     }
 
-    if (text.match(/^.*区$/)) {
+    if (text.match(/^(浦东新|黄浦|静安|徐汇|长宁|普陀|虹口|杨浦|宝山|闵行|嘉定|金山|松江|青浦|奉贤|崇明)区$/)) {
       setDistrict(text)
       continue
     }
@@ -79,7 +80,7 @@ async function parseFile(path) {
       text.split(/、|，/).forEach((address) => {
         address = address.trim()
         if (address) {
-          district.addresses.push(address)
+          district.addresses.push(address.replace(/(、|，|。)$/, ''))
         }
       })
     }
