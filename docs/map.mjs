@@ -1,4 +1,6 @@
 import {pointLayer, markerListLayer, map} from "./map_canvas.mjs"
+import { sortDate } from "./sort_date.mjs";
+
 
 let vueUrl = 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 if (location.href.match(/.*\.com|github\.io/)) {
@@ -127,7 +129,7 @@ Vue.createApp({
     onMounted(async () => {
       await Promise.all([loadAddressMap(), loadDataJson()])
 
-      dates.value = Object.keys(rawData.value).sort()
+      dates.value = Object.keys(rawData.value).sort(sortDate)
       currentDate.value = dates.value[dates.value.length-1]
     })
 
