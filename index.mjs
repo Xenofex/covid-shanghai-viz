@@ -12,9 +12,9 @@ async function parseFile(path) {
   const title = dom.window.document.querySelector('.Article-title, #activity-name').textContent
   const date = title.match(/\d+月\d+日/)[0]
 
-  // if (data[date]) {
-  //   return
-  // }
+  if (data[date]) {
+    return
+  }
 
   data[date] = {}
 
