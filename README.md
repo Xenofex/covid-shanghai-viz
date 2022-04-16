@@ -1,5 +1,7 @@
 上海2022年新型冠状病毒（covid-19）疫情各病例在地图上的分布。
 
+访问：https://xenofex.github.io/covid-shanghai-viz/
+
 数据使用每日“上海发布”公众号所发布的病例居住地址，html网页已包含在项目中
 
 # 使用
