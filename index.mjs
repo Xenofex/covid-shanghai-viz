@@ -2,21 +2,21 @@ import { JSDOM } from 'jsdom'
 import { readdir, readFile, writeFile } from 'fs/promises'
 import { existsSync } from 'fs'
 
-const dataFile = 'docs/data.json'
+// const dataFile = 'docs/data.json'
 
-const data = existsSync(dataFile) ? JSON.parse(await readFile(dataFile)) : {}
+// const data = existsSync(dataFile) ? JSON.parse(await readFile(dataFile)) : {}
 
 async function parseFile(path) {
+  let date = path.match(/\d+月\d+日/)?.[0]
+  const dateFile = `docs/data/${date}.json`
+  if (existsSync(dateFile)) return
+
   const content = await readFile(`html/${path}`)
   const dom = new JSDOM(content)
   const title = dom.window.document.querySelector('.Article-title, #activity-name').textContent
-  const date = title.match(/\d+月\d+日/)[0]
+  date = title.match(/\d+月\d+日/)[0]
 
-  if (data[date]) {
-    return
-  }
-
-  data[date] = {}
+  const data = {}
 
   const article = dom.window.document.querySelector('.Article_content, #js_content')
   let district, m
@@ -38,8 +38,7 @@ async function parseFile(path) {
         addresses: []
       }
 
-      data[date][district.name] = district
-
+      data[district.name] = district
     }
 
     if (text.match(/^(浦东新|黄浦|静安|徐汇|长宁|普陀|虹口|杨浦|宝山|闵行|嘉定|金山|松江|青浦|奉贤|崇明)区$/)) {
@@ -61,18 +60,6 @@ async function parseFile(path) {
         district.asymptomaticCases = parseInt(m[2], 10) || 0
       }
 
-      // if (m = text.match(/无新增.*?确诊病例/)) {
-      //   district.cases = 0
-      // } else if (m = text.match(/新增(\d+)例.*?确诊病例/)) {
-      //   district.cases = parseInt(m[1], 10)
-      // }
-
-      // if (m = text.match(/(\d+)例[^，、]*?无症状感染者/)) {
-      //   district.asymptomaticCases = parseInt(m[1], 10)
-      // } else if (m = text.match(/无新增.*?无症状感染者/)) {
-      //   district.asymptomaticCases = 0
-      // }
-
       continue
     }
 
@@ -85,6 +72,8 @@ async function parseFile(path) {
       })
     }
   }
+
+  await writeFile(dateFile, JSON.stringify(data))
 }
 
 const files = await readdir('html')
@@ -93,4 +82,4 @@ for (let file of files) {
   await parseFile(file)
 }
 
-await writeFile(dataFile, JSON.stringify(data))
+// await writeFile(dataFile, JSON.stringify(data))

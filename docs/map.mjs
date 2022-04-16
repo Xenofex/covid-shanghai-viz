@@ -39,48 +39,36 @@ Vue.createApp({
     const currentDate = ref()
     const dates = ref([])
     const mapType = ref('case-location')
-    const rawData = ref()
-
-    let addressMap
-
-    async function loadDataJson() {
-      let dataUrl = 'data.json'
-      if (location.href.includes('github.io')) 
-        dataUrl = "https://media.githubusercontent.com/media/Xenofex/covid-shanghai-viz/master/docs/data.json"
-
-      const r1 = await fetch(dataUrl, { mode: 'no-cors' })
-      rawData.value = await r1.json()
+    const rawData = ref({})
+    
+    async function loadData(date) {
+      if (rawData.value[date]) {
+        return rawData.value[date]
+      } else {
+        return rawData.value[date] = await (await fetch(`data/${date}.json`)).json()
+      }
     }
+    
+    const dataOfCurrentDate = computed(() => currentDate.value && rawData.value[currentDate.value])
 
-    async function loadAddressMap() {
-      let addressMapUrl = 'addressMap.json'
-      if (location.href.includes('github.io'))
-        addressMapUrl = "https://media.githubusercontent.com/media/Xenofex/covid-shanghai-viz/master/docs/addressMap.json"
-      const r2 = await fetch(addressMapUrl, { mode: 'no-cors' })
-      addressMap = await r2.json()
-    }
-
-
-    function caseLocationData(date) {
-      const values = rawData.value[date]
+    async function caseLocationData(date) {
+      const values = await loadData(date)
       const data = []
   
       for (const districtName in values) {
         const district = values[districtName]
-        const { addresses } = district
+        const { addressWithLocation } = district
         
-        for (const address of addresses) {
-          const fullAddress = districtName + address
-          const location = addressMap[fullAddress]
+        for (const [address, lat, lng] of addressWithLocation) {
   
           if (location) {
             data.push({
               geometry: {
                 type: 'Point',
-                coordinates: [location.lng, location.lat]
+                coordinates: [lng, lat]
               },
               properties: {
-                text: fullAddress.replace(/[，。]/, '')
+                text: address.replace(/[，。]/, '')
               }
             })
           }
@@ -106,7 +94,7 @@ Vue.createApp({
 
     async function districtData(date, extractor) {
       const result = []
-      const dataOfDay = rawData.value[date]
+      const dataOfDay = await loadData(date)
       for (const districtName in dataOfDay) {
         const count = extractor(dataOfDay[districtName])
         
@@ -127,9 +115,8 @@ Vue.createApp({
     }
 
     onMounted(async () => {
-      await Promise.all([loadAddressMap(), loadDataJson()])
-
-      dates.value = Object.keys(rawData.value).sort(sortDate)
+      dates.value = await (await fetch('dates.json')).json()
+      dates.value.sort(sortDate)
       currentDate.value = dates.value[dates.value.length-1]
     })
 
@@ -137,7 +124,7 @@ Vue.createApp({
       const date = currentDate.value
       switch(mapType.value) {
         case 'case-location':
-          pointLayer.setData(caseLocationData(date))
+          pointLayer.setData(await caseLocationData(date))
           markerListLayer.setData([])
           break;
         case 'district-statistics-symptomatic':
@@ -158,7 +145,6 @@ Vue.createApp({
     watch(mapType, reloadData)
     watch(currentDate, reloadData)
 
-    const dataOfCurrentDate = computed(() => rawData.value && rawData.value[currentDate?.value])
     const totalOfCurrentDate = computed(() => {
       let totalCases = 0, totalAsymptomaticCases = 0
       for (const district in dataOfCurrentDate.value) {
