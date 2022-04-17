@@ -43,9 +43,9 @@ for (const dateFile of dateFiles) {
             if (result?.location) {
               addressMap[fullAddress] = result.location
               if (!addressMapUpdated) addressMapUpdated = true
+              addressWithLocation.push([address1, result.location.lat, result.location.lng])
             }
 
-            addressWithLocation.push([address1, location.lat, location.lng])
           })
         }
       }
