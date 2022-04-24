@@ -4,7 +4,7 @@ import { existsSync } from 'fs'
 
 const districtRegex = /(浦东新|黄浦|静安|徐汇|长宁|普陀|虹口|杨浦|宝山|闵行|嘉定|金山|松江|青浦|奉贤|崇明).*(?:确诊病例|无症状感染者)/
 const symptomaticRegex = /(\d+例|无新增)[^，]*?确诊病例|确诊病例(\d+例)/
-const asymptomaticRegex = /((?<=新增)\d+例|无新增)[^，]*无症状感染者|无症状感染者(\d+例)/
+const asymptomaticRegex = /((?<=新增)\d+|无新增)[^，]*无症状感染者|无症状感染者(\d+例)/
 
 async function parseFile(path) {
   let date = path.match(/\d+月\d+日/)?.[0]
