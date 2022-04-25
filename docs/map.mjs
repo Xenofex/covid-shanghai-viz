@@ -1,4 +1,5 @@
-import {pointLayer, markerListLayer, map} from "./map_canvas.mjs"
+import { setupChart } from "./chart.mjs";
+import { pointLayer, markerListLayer, map } from "./map_canvas.mjs"
 import { sortDate } from "./sort_date.mjs";
 
 
@@ -118,6 +119,11 @@ Vue.createApp({
       dates.value = await (await fetch('dates.json')).json()
       dates.value.sort(sortDate)
       currentDate.value = dates.value[dates.value.length-1]
+      setupChart({
+        onClick({dataIndex}) {
+          currentDate.value = dates.value[dataIndex]
+        }
+      })
     })
 
     async function reloadData() {

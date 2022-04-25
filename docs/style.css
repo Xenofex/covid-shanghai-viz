@@ -2,6 +2,9 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 14px;
+  overflow: hidden;
+  width: 100%;
+  height: calc(100vh - env(safe-area-inset-bottom));
 }
 
 [v-cloak] {
@@ -12,13 +15,16 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  height: calc(100vh - env(safe-area-inset-bottom));
+  height: 100%;
   background: white;
   z-index: 100;
   box-shadow: 0 0 50px gray;
   transition: transform .25s ease;
   display: flex;
   flex-direction: column;
+  gap: .5em;
+  padding: .5em;
+  box-sizing: border-box;
 }
 
 #sidebar.collapsed {
@@ -40,6 +46,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.container {
+  height: 100%;
 }
 
 @media only screen and (min-width: 600px) {
@@ -65,12 +75,16 @@ body {
 
 #map_container {
   width: 100%;
-  height: calc(100vh - env(safe-area-inset-bottom));
+  height: 100%;
 }
 
 .date-list {
   flex: 1;
   overflow: auto;
+}
+
+.date-chart {
+  flex: 1;
 }
 
 .date-list ul {
@@ -85,12 +99,11 @@ body {
 
 #address-search {
   display: block;
-  width: calc(100% - 2em);
-  margin: 1em;
+  width: 100%;
 }
 
 table {
-  margin: 1em;
+  font-size: .8em;
 }
 
 /* 百度地图自动补全元素 */

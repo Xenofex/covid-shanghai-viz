@@ -10,6 +10,7 @@
   <title>上海疫情可视化</title>
   <script src="//api.map.baidu.com/api?v=1.0&type=webgl&ak=xbFGU3Ikuc2Gmu4Od2cdriVZ6wKpTczl"></script>
   <script src="https://code.bdstatic.com/npm/mapvgl@1.0.0-beta.140/dist/mapvgl.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.simple.min.js"></script>
   <!-- <script src="https://unpkg.com/vue@3"></script> -->
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VQ7LVXDP50"></script>
@@ -41,15 +42,18 @@
 
       <hr>
  -->
-      <div class="date-list">
+      <!-- <div class="date-list">
         <ul>
           <li v-for="date in dates.slice().reverse()" :key="date">
             <input type="radio" :name="'date'" :id="`radio-${date}`" :value="date" v-model="currentDate"/>
             <label :for="`radio-${date}`">{{date}}</label>
           </li>
         </ul>
-      </div>
-
+      </div> -->
+      <select class="date-select" v-model="currentDate"> 
+        <option v-for="date in dates.slice().reverse()" :key="date" :value="date">{{date}}</option>
+      </select>
+      <div class="date-chart"></div>
       <table>
         <thead>
           <tr>

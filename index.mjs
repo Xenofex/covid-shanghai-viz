@@ -76,3 +76,5 @@ for (let file of files) {
     await parseFile(file)
   }
 }
+
+import './summary.mjs'
