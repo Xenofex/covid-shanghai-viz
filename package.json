@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.mjs",
   "scripts": {
-    "start": "node index.mjs && node geocode.mjs",
+    "start": "node index.mjs && node geocode.mjs && node summary.mjs",
     "server": "((sleep 0.5; open 'http://localhost:8000/') &) && cd docs/ && python3 -m http.server",
     "deploy": "rsync -C -r docs/ \"$COVID_SHANGHAI_DEPLOY_TO\"",
     "test": "uvu test"
